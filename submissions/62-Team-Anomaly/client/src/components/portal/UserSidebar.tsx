@@ -26,8 +26,13 @@ const userNavItems = [
     { name: "Settings", href: "/portal/settings", icon: Settings },
 ];
 
+import { useAuth } from "@/context/AuthContext";
+import { LogOut } from "lucide-react";
+
 export default function UserSidebar() {
     const pathname = usePathname();
+    const { user, signOut } = useAuth();
+    const displayName = user?.email?.split('@')[0] || "Employee";
 
     return (
         <aside className="w-64 h-full flex flex-col justify-between py-8 px-6 bg-black/20 backdrop-blur-3xl border-r border-white/5 relative z-20 shrink-0">
@@ -44,7 +49,6 @@ export default function UserSidebar() {
                     </div>
                 </div>
 
-                {/* Navigation */}
                 <nav className="flex flex-col gap-1.5">
                     {userNavItems.map((item) => {
                         const isActive = pathname === item.href;
@@ -73,19 +77,24 @@ export default function UserSidebar() {
                 </nav>
             </div>
 
-            <div className="flex flex-col gap-6">
-                <button className="flex items-center gap-3 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white/20 hover:text-white transition-colors group">
-                    <HelpCircle className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" /> System Info
+            <div className="flex flex-col gap-4">
+                <button
+                    onClick={() => signOut()}
+                    className="flex items-center gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest text-[#FF4F4F]/60 hover:text-[#FF4F4F] hover:bg-[#FF4F4F]/5 transition-all group"
+                >
+                    <LogOut className="w-4 h-4" /> Terminate Link
                 </button>
 
                 <div className="glass-panel p-4 flex items-center gap-4 border-white/10 bg-white/[0.02]">
                     <div className="relative">
-                        <div className="w-10 h-10 rounded-full bg-cover border-2 border-white/10" style={{ backgroundImage: "url('https://i.pravatar.cc/100?img=33')" }} />
+                        <div className="w-10 h-10 rounded-xl bg-cover border-2 border-white/10 flex items-center justify-center bg-white/5 uppercase font-black text-[#4F7CFF] text-[10px]">
+                            {displayName.substring(0, 2)}
+                        </div>
                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#4CAF9A] rounded-full border-2 border-[#0E0E10] shadow-[0_0_8px_#4CAF9A]" />
                     </div>
-                    <div className="flex flex-col items-start leading-none gap-1">
-                        <span className="text-sm font-bold text-white tracking-tight text-left">Jordan Smith</span>
-                        <span className="text-[9px] uppercase font-black tracking-widest text-white/30 text-left">Employee</span>
+                    <div className="flex flex-col items-start leading-none gap-1 overflow-hidden">
+                        <span className="text-[11px] font-bold text-white tracking-tight text-left truncate w-full">{displayName}</span>
+                        <span className="text-[8px] uppercase font-black tracking-widest text-white/20 text-left">Node Connected</span>
                     </div>
                 </div>
             </div>
